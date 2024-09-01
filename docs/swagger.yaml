@@ -1,0 +1,177 @@
+basePath: /
+definitions:
+  models.CreateTaskRequest:
+    properties:
+      description:
+        type: string
+      due_date:
+        type: string
+      title:
+        type: string
+    required:
+    - due_date
+    - title
+    type: object
+  models.Tasks:
+    properties:
+      createAt:
+        type: string
+      description:
+        type: string
+      dueDate:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updateAt:
+        type: string
+    type: object
+  models.UpdateTaskRequest:
+    properties:
+      ID:
+        type: integer
+      description:
+        type: string
+      due_date:
+        type: string
+      title:
+        type: string
+    required:
+    - due_date
+    - title
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: A Tag service API in Go using Gin framework
+  title: Tag Service API
+  version: "1.0"
+paths:
+  /api/CreateTask:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new task in the system based on the provided JSON payload.
+      parameters:
+      - description: Task details
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Task successfully created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Could not create task
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new task
+      tags:
+      - tasks
+  /api/DeleteTask/{id}:
+    delete:
+      description: Deletes an existing task from the system by ID.
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Task successfully deleted
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Task not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Could not delete task
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a task
+      tags:
+      - tasks
+  /api/UpdTask:
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing task in the system based on the provided JSON
+        payload.
+      parameters:
+      - description: Task details
+        in: body
+        name: updatedTask
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Task successfully updated
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Could not update task
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a task
+      tags:
+      - tasks
+  /api/tasks:
+    get:
+      description: Gets a list of tasks from the system. If an ID is provided, retrieves
+        a single task by ID. Otherwise, retrieves all tasks.
+      parameters:
+      - description: Task ID
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of tasks or single task
+          schema:
+            $ref: '#/definitions/models.Tasks'
+        "404":
+          description: Task not found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Retrieve tasks
+      tags:
+      - tasks
+swagger: "2.0"

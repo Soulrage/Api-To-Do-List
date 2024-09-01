@@ -1,0 +1,9 @@
+basePath: /api
+host: localhost:8000
+info:
+  contact: {}
+  description: A Tag service API in Go using Gin framework
+  title: Tag Service API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

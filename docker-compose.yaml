@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: ToDo
+      POSTGRES_USER: Oleg
+      POSTGRES_PASSWORD: Oleg
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+
+  app:
+    build: .
+    container_name: todo_app
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ToDo
+      DB_USER: Oleg
+      DB_PASSWORD: Oleg
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+
+volumes:
+  pgdata:
