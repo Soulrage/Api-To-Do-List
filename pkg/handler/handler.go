@@ -33,6 +33,8 @@ func (h *Handler) InitRoutes() * gin.Engine{
 	r := router.Group("/api")
 	{
 		r.POST("/CreateTask", h.CreateTask)
+		r.POST("/Registration", h.Registration)
+		r.POST("/Auth", h.Auth)
 		r.GET("/tasks", h.GetTasks)
 		r.PUT("/UpdTask", h.UpdTask)
 		r.DELETE("/DeleteTask/:id", h.DeleteTask)}

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"To-Do/internal/models"
+	"To-Do/internal/modelRequests"
 	"To-Do/internal/service"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -90,7 +91,7 @@ func (h *Handler) GetTasks(c *gin.Context) {
 // @Produce      application/json
 // @Tags         tasks
 // @Accept       json
-// @Param        updatedTask body models.UpdateTaskRequest true "Task details"
+// @Param        updatedTask body modelRequests.UpdateTaskRequest true "Task details"
 // @Success      200  {object}  map[string]interface{}  "Task successfully updated"
 // @Failure      400  {object}  map[string]interface{}  "Invalid input"
 // @Failure      500  {object}  map[string]interface{}  "Could not update task"
@@ -144,3 +145,57 @@ func (h *Handler) DeleteTask(c *gin.Context) {
 
 	c.Status(http.StatusNoContent)
 }
+
+
+// Auth
+// @Summary      User Authentication
+// @Description  Authenticates user and generates JWT token.
+// @Produce      application/json
+// @Tags         auth
+// @Accept       json
+// @Param        user body modelRequests.AuthUserRequest true "User credentials"
+// @Success      200  {object}  map[string]string  "JWT token"
+// @Failure      400  {object}  map[string]interface{}  "Invalid input"
+// @Failure      500  {object}  map[string]interface{}  "User does not exist"
+// @Router       /api/Auth [post]
+func (h *Handler) Auth(c *gin.Context) {
+	var user modelRequests.AuthUserRequest
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	token, err := service.GenerateToken(h.DBConnect, user.Login, user.Password)
+	if err != nil{
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Such user does not exist"})
+		return
+	}
+	c.JSON(http.StatusOK, token)
+}
+
+
+
+// Registration
+// @Summary      User Registration
+// @Description  Registers a new user in the system.
+// @Produce      application/json
+// @Tags         auth
+// @Accept       json
+// @Param        user body modelRequests.RegisterUserRequests true "User credentials"
+// @Success      200  {object}  map[string]string  "User successfully created"
+// @Failure      400  {object}  map[string]interface{}  "Invalid input"
+// @Failure      500  {object}  map[string]interface{}  "User already exists"
+// @Router       /api/Registration [post]
+func (h *Handler) Registration(c *gin.Context) {
+	var user modelRequests.RegisterUserRequests
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err := service.RegistrationUsers(h.DBConnect, user.Login, user.Password, user.Email)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "This user already exists"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"create_user": "successful", "message": "User created"})
+}
+

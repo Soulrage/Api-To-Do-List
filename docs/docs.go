@@ -15,6 +15,57 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/Auth": {
+            "post": {
+                "description": "Authenticates user and generates JWT token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "User Authentication",
+                "parameters": [
+                    {
+                        "description": "User credentials",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modelRequests.AuthUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "JWT token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "User does not exist",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/CreateTask": {
             "post": {
                 "description": "Creates a new task in the system based on the provided JSON payload.",
@@ -108,6 +159,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/Registration": {
+            "post": {
+                "description": "Registers a new user in the system.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "User Registration",
+                "parameters": [
+                    {
+                        "description": "User credentials",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modelRequests.RegisterUserRequests"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User successfully created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "User already exists",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/UpdTask": {
             "put": {
                 "description": "Updates an existing task in the system based on the provided JSON payload.",
@@ -128,7 +230,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UpdateTaskRequest"
+                            "$ref": "#/definitions/modelRequests.UpdateTaskRequest"
                         }
                     }
                 ],
@@ -201,6 +303,61 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "modelRequests.AuthUserRequest": {
+            "type": "object",
+            "required": [
+                "login",
+                "password"
+            ],
+            "properties": {
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "modelRequests.RegisterUserRequests": {
+            "type": "object",
+            "required": [
+                "email",
+                "login",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "login": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "modelRequests.UpdateTaskRequest": {
+            "type": "object",
+            "required": [
+                "due_date",
+                "title"
+            ],
+            "properties": {
+                "ID": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "due_date": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "models.CreateTaskRequest": {
             "type": "object",
             "required": [
@@ -239,27 +396,9 @@ const docTemplate = `{
                 },
                 "updateAt": {
                     "type": "string"
-                }
-            }
-        },
-        "models.UpdateTaskRequest": {
-            "type": "object",
-            "required": [
-                "due_date",
-                "title"
-            ],
-            "properties": {
-                "ID": {
+                },
+                "userID": {
                     "type": "integer"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "due_date": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
                 }
             }
         }

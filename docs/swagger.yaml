@@ -1,5 +1,42 @@
 basePath: /
 definitions:
+  modelRequests.AuthUserRequest:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    required:
+    - login
+    - password
+    type: object
+  modelRequests.RegisterUserRequests:
+    properties:
+      email:
+        type: string
+      login:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - login
+    - password
+    type: object
+  modelRequests.UpdateTaskRequest:
+    properties:
+      ID:
+        type: integer
+      description:
+        type: string
+      due_date:
+        type: string
+      title:
+        type: string
+    required:
+    - due_date
+    - title
+    type: object
   models.CreateTaskRequest:
     properties:
       description:
@@ -26,20 +63,8 @@ definitions:
         type: string
       updateAt:
         type: string
-    type: object
-  models.UpdateTaskRequest:
-    properties:
-      ID:
+      userID:
         type: integer
-      description:
-        type: string
-      due_date:
-        type: string
-      title:
-        type: string
-    required:
-    - due_date
-    - title
     type: object
 host: localhost:8000
 info:
@@ -48,6 +73,40 @@ info:
   title: Tag Service API
   version: "1.0"
 paths:
+  /api/Auth:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates user and generates JWT token.
+      parameters:
+      - description: User credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/modelRequests.AuthUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: User does not exist
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User Authentication
+      tags:
+      - auth
   /api/CreateTask:
     post:
       consumes:
@@ -111,6 +170,40 @@ paths:
       summary: Delete a task
       tags:
       - tasks
+  /api/Registration:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user in the system.
+      parameters:
+      - description: User credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/modelRequests.RegisterUserRequests'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User successfully created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: User already exists
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User Registration
+      tags:
+      - auth
   /api/UpdTask:
     put:
       consumes:
@@ -123,7 +216,7 @@ paths:
         name: updatedTask
         required: true
         schema:
-          $ref: '#/definitions/models.UpdateTaskRequest'
+          $ref: '#/definitions/modelRequests.UpdateTaskRequest'
       produces:
       - application/json
       responses:

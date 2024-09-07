@@ -1,4 +1,4 @@
-package models
+package modelRequests
 
 
 type UpdateTaskRequest struct {

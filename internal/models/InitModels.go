@@ -25,6 +25,7 @@ func Migrate() error {
 
 	tables := []interface{}{
 		&Tasks{},
+		&Users{},
 	}
 	for _, table := range tables {
 		if !db.Migrator().HasTable(table) {
