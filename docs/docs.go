@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/Auth": {
+        "/Auth": {
             "post": {
                 "description": "Authenticates user and generates JWT token.",
                 "consumes": [
@@ -58,6 +58,57 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "User does not exist",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/Registration": {
+            "post": {
+                "description": "Registers a new user in the system.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "User Registration",
+                "parameters": [
+                    {
+                        "description": "User credentials",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/modelRequests.RegisterUserRequests"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User successfully created",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "User already exists",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
@@ -151,57 +202,6 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Could not delete task",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/Registration": {
-            "post": {
-                "description": "Registers a new user in the system.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "auth"
-                ],
-                "summary": "User Registration",
-                "parameters": [
-                    {
-                        "description": "User credentials",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/modelRequests.RegisterUserRequests"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User successfully created",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid input",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "500": {
-                        "description": "User already exists",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true

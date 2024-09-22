@@ -73,7 +73,7 @@ info:
   title: Tag Service API
   version: "1.0"
 paths:
-  /api/Auth:
+  /Auth:
     post:
       consumes:
       - application/json
@@ -105,6 +105,40 @@ paths:
             additionalProperties: true
             type: object
       summary: User Authentication
+      tags:
+      - auth
+  /Registration:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user in the system.
+      parameters:
+      - description: User credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/modelRequests.RegisterUserRequests'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User successfully created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: User already exists
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User Registration
       tags:
       - auth
   /api/CreateTask:
@@ -170,40 +204,6 @@ paths:
       summary: Delete a task
       tags:
       - tasks
-  /api/Registration:
-    post:
-      consumes:
-      - application/json
-      description: Registers a new user in the system.
-      parameters:
-      - description: User credentials
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/modelRequests.RegisterUserRequests'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: User successfully created
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Invalid input
-          schema:
-            additionalProperties: true
-            type: object
-        "500":
-          description: User already exists
-          schema:
-            additionalProperties: true
-            type: object
-      summary: User Registration
-      tags:
-      - auth
   /api/UpdTask:
     put:
       consumes:

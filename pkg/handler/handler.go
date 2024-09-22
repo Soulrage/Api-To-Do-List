@@ -30,11 +30,12 @@ func (h *Handler) InitRoutes() * gin.Engine{
 		log.Fatal("Open DB failed")
 	}
 	router.GET("/swagger/*any", swag.WrapHandler(swaggerFiles.Handler))
-	r := router.Group("/api")
+	router.POST("/Registration", h.Registration)
+	router.POST("/Auth", h.Auth)
+
+	r := router.Group("/api", h.userIdentity)
 	{
 		r.POST("/CreateTask", h.CreateTask)
-		r.POST("/Registration", h.Registration)
-		r.POST("/Auth", h.Auth)
 		r.GET("/tasks", h.GetTasks)
 		r.PUT("/UpdTask", h.UpdTask)
 		r.DELETE("/DeleteTask/:id", h.DeleteTask)}

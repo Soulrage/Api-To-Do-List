@@ -71,3 +71,21 @@ func RegistrationUsers(db *gorm.DB, login, password, email string) error {
 	}
 	return nil
 }
+
+
+func ParseToken(accessToken string) (uint, error){
+	token, err := jwt.ParseWithClaims(accessToken, &tokenClimes{}, func(token *jwt.Token) (interface{}, error){
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok{
+			return nil, errors.New("invalid signing method")
+		}
+		return []byte(signingKey), nil
+	})
+	if  err != nil{
+		return 0, nil
+	}
+	climes, ok := token.Claims.(*tokenClimes)
+	if !ok {
+		return 0, errors.New("token climes are not of type *tokenClimes")
+	}
+	return climes.UserID, nil
+}

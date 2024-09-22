@@ -157,7 +157,7 @@ func (h *Handler) DeleteTask(c *gin.Context) {
 // @Success      200  {object}  map[string]string  "JWT token"
 // @Failure      400  {object}  map[string]interface{}  "Invalid input"
 // @Failure      500  {object}  map[string]interface{}  "User does not exist"
-// @Router       /api/Auth [post]
+// @Router       /Auth [post]
 func (h *Handler) Auth(c *gin.Context) {
 	var user modelRequests.AuthUserRequest
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -184,7 +184,7 @@ func (h *Handler) Auth(c *gin.Context) {
 // @Success      200  {object}  map[string]string  "User successfully created"
 // @Failure      400  {object}  map[string]interface{}  "Invalid input"
 // @Failure      500  {object}  map[string]interface{}  "User already exists"
-// @Router       /api/Registration [post]
+// @Router       /Registration [post]
 func (h *Handler) Registration(c *gin.Context) {
 	var user modelRequests.RegisterUserRequests
 	if err := c.ShouldBindJSON(&user); err != nil {
