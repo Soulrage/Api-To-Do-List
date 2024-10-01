@@ -1,8 +1,8 @@
 # Api-To-Do-List
 
 
-This is a test API for To-Do List on GO.
-The API contains 5 methods
+This is a test API for To-Do List.
+API соддержит в себе 5 методов
 - [post] CreateTask
 - [get] Tasks
 - [get] Tasks:id
